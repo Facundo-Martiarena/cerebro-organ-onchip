@@ -3,113 +3,65 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Brain-Chip de Sustancia Negra · Organ-on-chip 🧠</title>
+<title>La Casita del Cerebro · Brain-Chip de Sustancia Negra 🏠🧠</title>
 
-<!-- Fuentes divertidas (con fallback a Comic Sans si no hay internet) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Gochi+Hand&family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --rojo:    #e4342f;
-    --azul:    #2b7fd4;
-    --azul-osc:#1f6fc4;
-    --amarillo:#ffd23f;
-    --amarillo-claro:#ffe88a;
-    --crema:   #fffdf5;
-    --tinta:   #37404a;
-    --font-titulo: "Gochi Hand", "Comic Sans MS", cursive;
-    --font-mano:   "Patrick Hand", "Comic Sans MS", cursive;
-    --font-cuerpo: "Baloo 2", "Comic Sans MS", system-ui, sans-serif;
-    --maxw: 1080px;
+    --rojo:#e4342f; --azul:#2b7fd4; --azul-osc:#1f6fc4;
+    --amarillo:#ffd23f; --amarillo-claro:#ffe88a; --crema:#fffdf5; --tinta:#37404a;
+    --font-titulo:"Gochi Hand","Comic Sans MS",cursive;
+    --font-mano:"Patrick Hand","Comic Sans MS",cursive;
+    --font-cuerpo:"Baloo 2","Comic Sans MS",system-ui,sans-serif;
+    --maxw:1080px;
   }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; }
   body {
-    font-family: var(--font-cuerpo);
-    color: var(--tinta);
-    overflow: hidden;
-    background-color: var(--amarillo);
+    font-family:var(--font-cuerpo); color:var(--tinta); overflow:hidden;
+    background-color:var(--amarillo);
     background-image:
-      linear-gradient(135deg, var(--amarillo-claro) 25%, transparent 25%),
-      linear-gradient(225deg, var(--amarillo-claro) 25%, transparent 25%),
-      linear-gradient(45deg,  var(--amarillo-claro) 25%, transparent 25%),
-      linear-gradient(315deg, var(--amarillo-claro) 25%, transparent 25%);
-    background-position: 24px 0, 24px 0, 0 0, 0 0;
-    background-size: 48px 48px;
+      linear-gradient(135deg,var(--amarillo-claro) 25%,transparent 25%),
+      linear-gradient(225deg,var(--amarillo-claro) 25%,transparent 25%),
+      linear-gradient(45deg,var(--amarillo-claro) 25%,transparent 25%),
+      linear-gradient(315deg,var(--amarillo-claro) 25%,transparent 25%);
+    background-position:24px 0,24px 0,0 0,0 0; background-size:48px 48px;
   }
+  .deck { position:relative; height:100vh; }
+  .slide { position:absolute; inset:0; display:none; align-items:center; justify-content:center; padding:clamp(18px,3vw,40px); animation:pop .45s cubic-bezier(.2,.9,.3,1.2) both; }
+  .slide.active { display:flex; }
+  @keyframes pop { from{opacity:0; transform:scale(.94) rotate(-.4deg);} to{opacity:1; transform:none;} }
 
-  .deck { position: relative; height: 100vh; }
-  .slide {
-    position: absolute; inset: 0; display: none;
-    align-items: center; justify-content: center;
-    padding: clamp(18px, 3vw, 40px);
-    animation: pop .45s cubic-bezier(.2,.9,.3,1.2) both;
-  }
-  .slide.active { display: flex; }
-  @keyframes pop { from { opacity:0; transform: scale(.94) rotate(-.4deg);} to{opacity:1; transform:none;} }
+  .card { position:relative; width:100%; max-width:var(--maxw); max-height:90vh; overflow:auto; background:var(--crema); border-radius:26px; padding:clamp(26px,3.4vw,46px); box-shadow:0 18px 50px rgba(0,0,0,.18); }
+  .card::before { content:""; position:absolute; inset:14px; border:3px dashed var(--azul); border-radius:18px; pointer-events:none; opacity:.85; }
+  .card > * { position:relative; z-index:1; }
 
-  .card {
-    position: relative;
-    width: 100%; max-width: var(--maxw);
-    max-height: 90vh; overflow: auto;
-    background: var(--crema);
-    border-radius: 26px;
-    padding: clamp(26px, 3.4vw, 48px);
-    box-shadow: 0 18px 50px rgba(0,0,0,0.18);
-  }
-  .card::before {
-    content: ""; position: absolute; inset: 14px;
-    border: 3px dashed var(--azul);
-    border-radius: 18px; pointer-events: none; opacity: .85;
-  }
-  .card > * { position: relative; z-index: 1; }
+  .confetti { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+  .confetti i { position:absolute; display:block; width:16px; height:5px; border-radius:4px; }
+  .confetti i.dot { width:9px; height:9px; border-radius:50%; }
 
-  .confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index:0; }
-  .confetti i { position: absolute; display: block; width: 16px; height: 5px; border-radius: 4px; }
-  .confetti i.dot { width: 9px; height: 9px; border-radius: 50%; }
+  .eyebrow { font-family:var(--font-mano); font-size:clamp(1rem,2vw,1.25rem); color:var(--azul); margin-bottom:4px; display:inline-block; transform:rotate(-1.5deg); }
+  h1 { font-family:var(--font-titulo); font-size:clamp(2.2rem,5.6vw,4.4rem); line-height:1.02; font-weight:400; }
+  h2 { font-family:var(--font-titulo); font-size:clamp(1.7rem,4.2vw,2.9rem); line-height:1.05; margin-bottom:6px; }
+  h1 .r,h2 .r{ color:var(--rojo);} h1 .b,h2 .b{ color:var(--azul);} h1 .y,h2 .y{ color:var(--amarillo); -webkit-text-stroke:1.5px var(--azul-osc);}
+  .lead { font-family:var(--font-mano); font-size:clamp(1.05rem,1.9vw,1.35rem); line-height:1.45; max-width:66ch; margin-top:10px; }
+  .underline { position:relative; white-space:nowrap; }
+  .underline::after { content:""; position:absolute; left:0; right:0; bottom:-6px; height:7px; background:var(--amarillo); border-radius:6px; z-index:-1; transform:rotate(-.6deg); }
 
-  .eyebrow {
-    font-family: var(--font-mano); font-size: clamp(1rem, 2vw, 1.25rem);
-    color: var(--azul); margin-bottom: 4px; display: inline-block; transform: rotate(-1.5deg);
-  }
-  h1 { font-family: var(--font-titulo); font-size: clamp(2.3rem, 6vw, 4.6rem); line-height: 1.02; font-weight: 400; }
-  h2 { font-family: var(--font-titulo); font-size: clamp(1.8rem, 4.4vw, 3rem); line-height: 1.05; margin-bottom: 6px; }
-  h1 .r, h2 .r { color: var(--rojo); }
-  h1 .b, h2 .b { color: var(--azul); }
-  h1 .y, h2 .y { color: var(--amarillo); -webkit-text-stroke: 1.5px var(--azul-osc); }
-
-  .lead { font-family: var(--font-mano); font-size: clamp(1.05rem, 1.9vw, 1.35rem); line-height: 1.45; max-width: 64ch; margin-top: 10px; }
-
-  .underline { position: relative; white-space: nowrap; }
-  .underline::after { content:""; position:absolute; left:0; right:0; bottom:-6px; height:7px; background: var(--amarillo); border-radius:6px; z-index:-1; transform: rotate(-.6deg); }
-
-  /* portada */
-  .portada { text-align: center; }
-  .portada .balloons { font-size: clamp(2.2rem, 5vw, 3.4rem); margin-bottom: 2px; }
-  .portada .clown { font-size: clamp(2.6rem, 8vw, 5rem); margin-top: 8px; display:inline-block; animation: sway 3s ease-in-out infinite; }
+  .portada { text-align:center; }
+  .portada .emojibig { font-size:clamp(2.6rem,7vw,4.4rem); margin-bottom:2px; display:inline-block; animation:sway 3s ease-in-out infinite; }
   @keyframes sway { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
-  .meta { margin-top: 22px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
-  .tag { font-family: var(--font-mano); font-size: 1rem; background:#fff; border:2.5px solid var(--azul); color:var(--azul-osc); padding:8px 16px; border-radius:999px; transform:rotate(-1deg); box-shadow:2px 3px 0 rgba(43,127,212,.25); }
+  .meta { margin-top:20px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .tag { font-family:var(--font-mano); font-size:1rem; background:#fff; border:2.5px solid var(--azul); color:var(--azul-osc); padding:8px 16px; border-radius:999px; transform:rotate(-1deg); box-shadow:2px 3px 0 rgba(43,127,212,.25); }
   .tag:nth-child(even){ transform:rotate(1.2deg); border-color:var(--rojo); color:var(--rojo); box-shadow:2px 3px 0 rgba(228,52,47,.2);}
 
-  /* link al paper */
   .paperlink { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mano); font-size:1rem; text-decoration:none; background:var(--rojo); color:#fff; padding:9px 18px; border-radius:999px; margin-top:14px; box-shadow:2px 3px 0 rgba(228,52,47,.35); transform:rotate(-1deg); }
   .paperlink:hover{ transform:rotate(0) translateY(-2px); }
 
-  /* agenda */
-  .lista { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:18px; }
-  .item { display:flex; gap:12px; align-items:center; background:#fff; border:2.5px dashed var(--amarillo); border-radius:16px; padding:11px 14px; transition: transform .15s; }
-  .item:hover{ transform: translateY(-3px) rotate(-.6deg); border-color: var(--azul); }
-  .globo { flex:0 0 auto; width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font-family:var(--font-titulo); font-size:1.3rem; color:#fff; box-shadow:2px 3px 0 rgba(0,0,0,.12); }
-  .item h3{ font-family:var(--font-cuerpo); font-weight:700; font-size:.98rem; }
-  .item p{ font-family:var(--font-mano); color:var(--azul); font-size:.88rem; }
-
-  /* secciones */
-  .head { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:4px; }
-  .quien { font-family: var(--font-mano); white-space:nowrap; background: var(--amarillo); color: var(--azul-osc); padding:7px 16px; border-radius:999px; font-size:1rem; border:2.5px solid var(--azul-osc); transform:rotate(1.5deg); }
+  .head { margin-bottom:4px; }
 
   .cols { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
   .cols.tres { grid-template-columns:repeat(3,1fr); }
@@ -123,13 +75,13 @@
   .box.azul li::before{ content:"●"; color:var(--azul); -webkit-text-stroke:0; font-size:.7rem; top:4px;}
   .box.rojo li::before{ content:"✦"; color:var(--rojo); -webkit-text-stroke:0;}
   .box li b{ font-family:var(--font-cuerpo); font-weight:700; }
+  .box li .sci{ font-family:var(--font-cuerpo); font-size:.82rem; color:var(--azul); font-weight:700; }
 
   .pastillas{ display:flex; flex-wrap:wrap; gap:9px; margin-top:14px; }
   .pastilla{ font-family:var(--font-mano); font-size:.95rem; background:#fff; border:2.5px solid var(--azul); color:var(--azul-osc); padding:6px 13px; border-radius:999px; transform:rotate(-1deg); }
   .pastilla:nth-child(3n){ border-color:var(--rojo); color:var(--rojo); transform:rotate(1.2deg);}
   .pastilla:nth-child(3n+1){ border-color:var(--amarillo); color:#b8860b; }
 
-  /* tablas */
   .tabla{ width:100%; border-collapse:separate; border-spacing:0 7px; margin-top:12px; font-family:var(--font-mano); }
   .tabla td{ background:#fff; padding:9px 14px; font-size:1rem; border-top:2.5px solid var(--amarillo); border-bottom:2.5px solid var(--amarillo); }
   .tabla td:first-child{ border-left:2.5px solid var(--amarillo); border-radius:12px 0 0 12px; font-weight:700; color:var(--azul-osc); white-space:nowrap; }
@@ -137,14 +89,13 @@
   .tabla tr:nth-child(even) td{ border-color:var(--azul); }
   .tabla tr:nth-child(even) td:first-child{ color:var(--rojo); }
   .tabla.chica td{ font-size:.92rem; padding:7px 12px; }
+  .tabla .sci{ color:var(--azul); font-weight:700; font-family:var(--font-cuerpo); font-size:.8rem; }
 
-  /* diagrama */
   .diagrama{ display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:center; margin-top:12px; }
   .chip-svg{ width:100%; height:auto; background:#fff; border:3px solid var(--azul); border-radius:16px; padding:8px; box-shadow:4px 5px 0 rgba(43,127,212,.2); }
 
   .cierre{ text-align:center; }
 
-  /* chrome */
   .chrome{ position:fixed; bottom:0; left:0; right:0; z-index:5; display:flex; align-items:center; justify-content:space-between; padding:12px clamp(16px,4vw,40px); pointer-events:none; }
   .marca{ font-family:var(--font-mano); color:var(--azul-osc); font-size:.95rem; background:rgba(255,255,255,.75); padding:4px 12px; border-radius:999px; }
   .nav{ display:flex; gap:8px; align-items:center; pointer-events:auto; }
@@ -152,288 +103,259 @@
   .nav button:hover{ transform:translateY(-2px); background:var(--amarillo-claro); }
   .nav button:active{ transform:translateY(1px); box-shadow:none; }
   .contador{ font-family:var(--font-mano); color:var(--azul-osc); background:rgba(255,255,255,.75); padding:6px 12px; border-radius:999px; min-width:56px; text-align:center; }
-
   .barra{ position:fixed; top:0; left:0; height:6px; z-index:6; background:var(--rojo); transition:width .4s ease; border-radius:0 6px 6px 0; }
   .pista{ position:fixed; bottom:66px; left:50%; transform:translateX(-50%); z-index:4; font-family:var(--font-mano); color:var(--azul-osc); background:rgba(255,255,255,.7); padding:4px 14px; border-radius:999px; font-size:.9rem; }
 
-  @media (max-width: 800px){
-    .lista, .cols, .cols.tres, .diagrama{ grid-template-columns:1fr; }
-    .pista{ display:none; }
-  }
+  @media (max-width:800px){ .cols, .cols.tres, .diagrama{ grid-template-columns:1fr; } .pista{ display:none; } }
   .card::-webkit-scrollbar{ width:8px; }
   .card::-webkit-scrollbar-thumb{ background:var(--amarillo); border-radius:8px; }
 </style>
 </head>
 <body>
 <div class="barra" id="barra"></div>
-
 <div class="deck" id="deck">
 
   <!-- 0 · PORTADA -->
   <section class="slide active">
     <div class="card portada">
-      <div class="balloons">🎈🎈🎈</div>
-      <p class="eyebrow">Presentación oficial 🧠</p>
-      <h1><span class="b">Brain-Chip</span> de<br><span class="r">Sustancia Negra</span></h1>
-      <p class="lead" style="margin:10px auto 0">Un <b>Organ-on-Chip</b> del cerebro humano para estudiar el <b>Parkinson</b> y la barrera hematoencefálica.</p>
-      <div><a class="paperlink" href="https://www.nature.com/articles/s41467-021-26066-5" target="_blank" rel="noopener">📄 Paper · Nature Communications (2021)</a></div>
-      <div class="clown">🤡</div>
-      <div class="meta">
-        <span class="tag">🎉 7 secciones</span>
-        <span class="tag">👥 1 por integrante</span>
-      </div>
+      <div class="emojibig">🏠🧠</div>
+      <p class="eyebrow">Presentación oficial</p>
+      <h1>La <span class="r">casita</span> del cerebro</h1>
+      <p class="lead" style="margin:10px auto 0">Un <b>Organ-on-Chip</b> de la <b>Sustancia Negra</b> para entender el <b>Parkinson</b> — explicado como una casa de juguete. 🏡</p>
+      <div><a class="paperlink" href="https://www.nature.com/articles/s41467-021-26066-5" target="_blank" rel="noopener">📄 Pediaditakis et al. · Nature Communications (2021)</a></div>
     </div>
   </section>
 
-  <!-- 1 · AGENDA -->
+  <!-- 1 · LA METÁFORA + OBJETIVO DEL ESTUDIO -->
   <section class="slide">
     <div class="card">
-      <p class="eyebrow">¿Qué vamos a ver? 🗺️</p>
-      <h2>El <span class="underline">recorrido</span> de hoy</h2>
-      <p class="lead">Del problema al chip, y del chip a cómo lo medimos. ¡Cada integrante cuenta una parte! 🔎</p>
-      <div class="lista">
-        <div class="item"><div class="globo" style="background:var(--rojo)">1</div><div><h3>Modelo existente</h3><p>👤 Integrante 1</p></div></div>
-        <div class="item"><div class="globo" style="background:var(--azul)">2</div><div><h3>Diseño del chip</h3><p>👤 Integrante 2</p></div></div>
-        <div class="item"><div class="globo" style="background:#2fae6a">3</div><div><h3>Materiales</h3><p>👤 Integrante 3</p></div></div>
-        <div class="item"><div class="globo" style="background:#e58f2f">4</div><div><h3>Fabricación</h3><p>👤 Integrante 4</p></div></div>
-        <div class="item"><div class="globo" style="background:#9b5cff">5</div><div><h3>Tipos celulares</h3><p>👤 Integrante 5</p></div></div>
-        <div class="item"><div class="globo" style="background:#e4348f">6</div><div><h3>¿Modelo patológico?</h3><p>👤 Integrante 6</p></div></div>
-        <div class="item" style="grid-column:1/-1;"><div class="globo" style="background:var(--azul-osc)">7</div><div><h3>Observación y monitorización</h3><p>👤 Integrante 7</p></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2 · MODELO EXISTENTE -->
-  <section class="slide">
-    <div class="card">
-      <div class="head">
-        <div><p class="eyebrow">Sección 1 🔎</p><h2><span class="r">Modelo</span> existente</h2></div>
-        <span class="quien">👤 Integrante 1</span>
-      </div>
-      <p class="lead">Partimos de un modelo ya publicado: el <b>Human Substantia Nigra Brain-Chip</b>, que reproduce parte de la <b>unidad neurovascular</b> de la sustancia negra — la región más golpeada por el Parkinson.</p>
+      <p class="eyebrow">Para arrancar… 🏚️</p>
+      <h2>Una <span class="r">casa antigua</span> y muy valiosa</h2>
+      <p class="lead">Imaginá una casa antigua y delicada <b>(= nuestro cerebro)</b>. Es tan frágil que <b>no podemos abrir las paredes</b> para ver las tuberías y los cables sin romperla.</p>
       <div class="cols">
         <div class="box azul">
-          <h3>🎯 ¿Qué estudia?</h3>
+          <h3>💡 La solución</h3>
           <ul>
-            <li>La interacción entre <b>neuronas, astrocitos, microglía, pericitos y endotelio</b>.</li>
-            <li>Cómo la acumulación de <b>α-sinucleína</b> daña neuronas y <b>BBB</b>.</li>
+            <li>Hicieron una <b>"casita de juguete en miniatura"</b> → el <b>chip</b>.</li>
+            <li>Copiaron un rincón muy específico: la <b>Sustancia Negra</b>.</li>
+            <li>Es la zona que <b>más sufre en el Parkinson</b>.</li>
           </ul>
         </div>
         <div class="box rojo">
-          <h3>💡 ¿Por qué es interesante?</h3>
+          <h3>🎯 El objetivo del estudio</h3>
           <ul>
-            <li>No cultiva solo neuronas: <b>une tejido neuronal + vasos sanguíneos</b>.</li>
-            <li>Reproduce la <b>interfaz cerebro–sangre</b> de forma simplificada.</li>
+            <li>Ver <b>en vivo</b> cómo se comunican los "vecinos" del barrio cerebral.</li>
+            <li>Y qué pasa cuando llega un <b>ocupante no deseado</b>: la proteína dañina <b>α-sinucleína</b>.</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 3 · DISEÑO DEL CHIP -->
+  <!-- 2 · EL OBJETIVO: QUÉ COPIAR -->
   <section class="slide">
     <div class="card">
-      <div class="head">
-        <div><p class="eyebrow">Sección 2 ✏️</p><h2>Diseño del <span class="b">chip</span></h2></div>
-        <span class="quien">👤 Integrante 2</span>
+      <div class="head"><p class="eyebrow">Paso 1 🧩</p><h2>¿Qué querían <span class="b">copiar</span> de la casa?</h2></div>
+      <p class="lead">En el cerebro, las neuronas <b>no viven solas</b>. Necesitan dos cosas del vecindario:</p>
+      <div class="cols">
+        <div class="box azul">
+          <h3>🚰 Un sistema de tuberías</h3>
+          <ul>
+            <li>Los <b>vasos sanguíneos</b> que les traen el alimento.</li>
+            <li>Sin tuberías, las neuronas no comen.</li>
+          </ul>
+        </div>
+        <div class="box rojo">
+          <h3>🧱 Una pared de protección</h3>
+          <ul>
+            <li>La <b>Barrera Hematoencefálica</b> (BBB).</li>
+            <li>Evita que la "suciedad" de la sangre entre al cerebro.</li>
+          </ul>
+        </div>
       </div>
+      <p class="lead">👉 Querían copiar ese <b>vecindario completo</b> — no solo las neuronas sueltas.</p>
+    </div>
+  </section>
+
+  <!-- 3 · EL DISEÑO: CASITA DE DOS PISOS -->
+  <section class="slide">
+    <div class="card">
+      <div class="head"><p class="eyebrow">Paso 2 🏠</p><h2>Una casita de <span class="r">dos pisos</span></h2></div>
       <div class="diagrama">
         <div>
-          <p class="lead" style="margin-top:0"><b>Dos canales microfluídicos paralelos</b> separados por una <b>membrana porosa de PDMS</b>. Arriba el cerebro, abajo los vasos. Cada canal con entrada y salida propias. 🧠🩸</p>
-          <table class="tabla chica">
-            <tr><td>Canal cerebral</td><td>1 × 1 mm</td></tr>
-            <tr><td>Canal vascular</td><td>1 × 0,2 mm</td></tr>
-            <tr><td>Membrana PDMS</td><td>~50 μm de grosor</td></tr>
-            <tr><td>Poros</td><td>~7 μm Ø, separados ~40 μm</td></tr>
-          </table>
+          <p class="lead" style="margin-top:0">Una cajita transparente dividida en dos pisos por un <b>suelo lleno de agujeritos</b> (la membrana porosa). ¡Así los vecinos de arriba y abajo se mandan "notas"! 📨</p>
+          <div class="pastillas">
+            <span class="pastilla">🏠 Piso de arriba = cerebro</span>
+            <span class="pastilla">🩸 Piso de abajo = sangre</span>
+            <span class="pastilla">🕳️ Suelo con agujeritos</span>
+          </div>
         </div>
         <svg class="chip-svg" viewBox="0 0 400 270" xmlns="http://www.w3.org/2000/svg">
           <rect x="18" y="18" width="364" height="234" rx="18" fill="#fffdf5" stroke="#ffd23f" stroke-width="3"/>
-          <rect x="50" y="62" width="300" height="56" rx="12" fill="#9b5cff" opacity="0.9"/>
-          <text x="62" y="86" fill="#fff" font-size="13" font-weight="700" font-family="Comic Sans MS, sans-serif">Brain channel</text>
-          <text x="62" y="104" fill="#fff" font-size="10" font-family="Comic Sans MS, sans-serif">neuronas · astrocitos · microglía · pericitos</text>
+          <rect x="50" y="60" width="300" height="58" rx="12" fill="#9b5cff" opacity="0.9"/>
+          <text x="62" y="84" fill="#fff" font-size="13" font-weight="700" font-family="Comic Sans MS, sans-serif">🏠 Piso de arriba · el cerebro</text>
+          <text x="62" y="103" fill="#fff" font-size="10" font-family="Comic Sans MS, sans-serif">neuronas · cocineros · policías · albañiles</text>
           <line x1="50" y1="134" x2="350" y2="134" stroke="#2b7fd4" stroke-width="2" stroke-dasharray="5 6"/>
-          <text x="128" y="130" fill="#2b7fd4" font-size="10" font-family="Comic Sans MS, sans-serif">membrana porosa de PDMS (~7 μm)</text>
-          <rect x="50" y="150" width="300" height="44" rx="12" fill="#e4342f" opacity="0.85"/>
-          <text x="62" y="170" fill="#fff" font-size="13" font-weight="700" font-family="Comic Sans MS, sans-serif">Vascular channel</text>
-          <text x="62" y="186" fill="#fff" font-size="10" font-family="Comic Sans MS, sans-serif">células endoteliales cerebrales</text>
-          <circle cx="40" cy="90" r="10" fill="#9b5cff"/><circle cx="360" cy="90" r="10" fill="#9b5cff"/>
-          <circle cx="40" cy="172" r="10" fill="#e4342f"/><circle cx="360" cy="172" r="10" fill="#e4342f"/>
+          <text x="112" y="130" fill="#2b7fd4" font-size="10" font-family="Comic Sans MS, sans-serif">🕳️ suelo con agujeritos (membrana porosa)</text>
+          <rect x="50" y="150" width="300" height="46" rx="12" fill="#e4342f" opacity="0.85"/>
+          <text x="62" y="170" fill="#fff" font-size="13" font-weight="700" font-family="Comic Sans MS, sans-serif">🩸 Piso de abajo · el río de la sangre</text>
+          <text x="62" y="187" fill="#fff" font-size="10" font-family="Comic Sans MS, sans-serif">las "baldosas" (células endoteliales)</text>
+          <circle cx="40" cy="89" r="10" fill="#9b5cff"/><circle cx="360" cy="89" r="10" fill="#9b5cff"/>
+          <circle cx="40" cy="173" r="10" fill="#e4342f"/><circle cx="360" cy="173" r="10" fill="#e4342f"/>
         </svg>
       </div>
     </div>
   </section>
 
-  <!-- 4 · MATERIALES -->
+  <!-- 4 · MATERIALES Y CONSTRUCCIÓN -->
   <section class="slide">
     <div class="card">
-      <div class="head">
-        <div><p class="eyebrow">Sección 3 🧪</p><h2><span class="y">Materiales</span></h2></div>
-        <span class="quien">👤 Integrante 3</span>
-      </div>
-      <p class="lead">Antes de sembrar, los canales se <b>funcionalizan</b> y se recubren con matriz extracelular (colágeno IV + fibronectina + laminina).</p>
-      <table class="tabla">
-        <tr><td>PDMS</td><td>Material principal del chip y de la membrana flexible</td></tr>
-        <tr><td>Colágeno IV</td><td>Matriz extracelular: adhesión y organización celular</td></tr>
-        <tr><td>Fibronectina</td><td>Recubrimiento de las superficies para las células</td></tr>
-        <tr><td>Laminina</td><td>Microambiente similar al tejido cerebral</td></tr>
-        <tr><td>Medios específicos</td><td>Mantener cada población celular</td></tr>
-        <tr><td>Membrana porosa</td><td>Separa compartimentos y permite la interacción celular</td></tr>
-      </table>
-      <div><a class="paperlink" href="https://www.nature.com/articles/s41467-021-26066-5" target="_blank" rel="noopener">📄 Fuente · Nature Comms s41467-021-26066-5</a></div>
-    </div>
-  </section>
-
-  <!-- 5 · FABRICACIÓN -->
-  <section class="slide">
-    <div class="card">
-      <div class="head">
-        <div><p class="eyebrow">Sección 4 🛠️</p><h2>¿Cómo se <span class="r">fabrica</span>?</h2></div>
-        <span class="quien">👤 Integrante 4</span>
-      </div>
-      <p class="lead">¡Ojo con el detalle importante! Los autores <b>NO fabricaron el chip desde cero</b>: usaron un <b>chip comercial</b>.</p>
-      <div class="cols">
-        <div class="box azul">
-          <h3>🏭 El dispositivo</h3>
-          <ul>
-            <li>Chip comercial <b>Chip-S1® de Emulate</b>.</li>
-            <li>Fabricado en <b>PDMS</b>: dos canales + membrana porosa.</li>
-            <li>Microfabricación de un dispositivo microfluídico.</li>
-          </ul>
-        </div>
-        <div class="box rojo">
-          <h3>🧴 La preparación</h3>
-          <ul>
-            <li><b>Funcionalización</b> de superficies con reactivos + <b>luz UV</b>.</li>
-            <li>Recubrimiento con <b>matriz extracelular</b> (colágeno IV, fibronectina, laminina).</li>
-            <li>Recién después, se siembran las células. 🌱</li>
-          </ul>
-        </div>
-      </div>
-      <p class="lead" style="font-size:1rem"><b>⚠️ Importante:</b> este paper NO usa "fotolitografía" — conviene decir <i>microfluídica con Chip-S1® funcionalizado</i>, que es lo que realmente hicieron.</p>
-    </div>
-  </section>
-
-  <!-- 6 · TIPOS CELULARES -->
-  <section class="slide">
-    <div class="card">
-      <div class="head">
-        <div><p class="eyebrow">Sección 5 🔬</p><h2>Tipos <span class="b">celulares</span></h2></div>
-        <span class="quien">👤 Integrante 5</span>
-      </div>
-      <p class="lead"><b>Cinco tipos celulares humanos</b> → reproducen la unidad neurovascular (NVU). 🤝</p>
-      <table class="tabla chica">
-        <tr><td>🧠 Neuronas dopaminérgicas</td><td>Derivadas de iPSC humanas · <b>brain channel</b></td></tr>
-        <tr><td>⭐ Astrocitos</td><td>Primarios humanos · <b>brain channel</b></td></tr>
-        <tr><td>🛡️ Microglía</td><td>Primaria humana · <b>brain channel</b></td></tr>
-        <tr><td>🩸 Pericitos</td><td>Primarios humanos · <b>brain channel</b></td></tr>
-        <tr><td>🩸 Endoteliales microvasculares</td><td>Derivadas de iPSC · revisten el <b>vascular channel</b></td></tr>
-      </table>
-      <p class="lead" style="font-size:1rem">Las 4 primeras van en el <b>canal cerebral</b>; las endoteliales forman el <b>revestimiento vascular</b>.</p>
-    </div>
-  </section>
-
-  <!-- 7 · PATOLÓGICO -->
-  <section class="slide">
-    <div class="card">
-      <div class="head">
-        <div><p class="eyebrow">Sección 6 🧬</p><h2>¿Es <span class="r">patológico</span>?</h2></div>
-        <span class="quien">👤 Integrante 6</span>
-      </div>
-      <p class="lead"><b>SÍ → Enfermedad de Parkinson.</b> Introdujeron <b>fibrillas preformadas de α-sinucleína</b> en el canal cerebral para inducir la patología. 💥</p>
-      <div class="cols">
-        <div class="box rojo">
-          <h3>🤒 Lo que reprodujo</h3>
-          <ul>
-            <li>Acumulación de <b>α-sinucleína fosforilada</b>.</li>
-            <li><b>Alteraciones mitocondriales</b> y aumento de <b>ROS</b>.</li>
-            <li><b>Neuroinflamación</b>: activación de astrocitos y microglía.</li>
-          </ul>
-        </div>
-        <div class="box azul">
-          <h3>💀 Las consecuencias</h3>
-          <ul>
-            <li><b>Muerte neuronal</b>.</li>
-            <li><b>Alteración de la barrera hematoencefálica</b>.</li>
-            <li>Un modelo <i>in vitro</i> fiel de Parkinson.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="pastillas">
-        <span class="pastilla">α-sinucleína (αSyn)</span>
-        <span class="pastilla">Fibrillas preformadas</span>
-        <span class="pastilla">Modelo de Parkinson 🧠</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8 · OBSERVACIÓN -->
-  <section class="slide">
-    <div class="card">
-      <div class="head">
-        <div><p class="eyebrow">Sección 7 👀</p><h2>¿Cómo lo <span class="b">miramos</span>?</h2></div>
-        <span class="quien">👤 Integrante 7</span>
-      </div>
+      <div class="head"><p class="eyebrow">Pasos 3 y 4 🧱</p><h2><span class="y">Plastilina</span> de alta tecnología</h2></div>
       <div class="cols tres">
         <div class="box">
-          <h3>🔬 Imagen</h3>
+          <h3>🧴 El plástico</h3>
           <ul>
-            <li><b>Inmunofluorescencia</b> + <b>microscopía confocal</b> (imágenes 3D).</li>
-            <li>TH/MAP2→neuronas · GFAP→astrocitos</li>
-            <li>IBA1/TMEM119→microglía · NG2→pericitos · CD31→endotelio</li>
-            <li>Claudina-1/-5, Occludina, ZO-1→uniones BBB · pSer129-αSyn→patología</li>
+            <li>Cajita de plástico <b>transparente, blando y flexible</b>.</li>
+            <li>Parecido a la silicona de los <b>moldes de cocina</b>.</li>
+            <li><span class="sci">= PDMS</span></li>
           </ul>
         </div>
         <div class="box azul">
-          <h3>🩸 Barrera + bioquímica</h3>
+          <h3>🌱 El "pegamento"</h3>
           <ul>
-            <li><b>Permeabilidad BBB</b>: dextrano 3 kDa y Lucifer Yellow 0,5 kDa.</li>
-            <li><b>ELISA</b>: dopamina y mediadores inflamatorios.</li>
-            <li><b>Western blot</b>: α-sinucleína fosforilada.</li>
+            <li>Una capita de proteínas para que las células <b>no se resbalen</b>.</li>
+            <li>Como poner <b>tierra buena en una maceta</b>.</li>
+            <li><span class="sci">= colágeno + fibronectina + laminina</span></li>
           </ul>
         </div>
         <div class="box rojo">
-          <h3>🧫 Mitocondria y viabilidad</h3>
+          <h3>🛒 ¿De dónde salió?</h3>
           <ul>
-            <li><b>JC-1</b>: potencial de membrana mitocondrial.</li>
-            <li><b>CellROX</b>: especies reactivas de oxígeno (ROS).</li>
-            <li><b>LIVE/DEAD</b>: viabilidad y muerte celular.</li>
+            <li>No la fabricaron desde cero: <b>la compraron</b> ya hecha.</li>
+            <li>Le hicieron un "tratamiento de belleza" con <b>luz UV</b> + proteínas.</li>
+            <li><span class="sci">= Chip-S1® de Emulate</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="lead" style="font-size:1rem"><b>⚠️ Ojo:</b> este paper NO usa "fotolitografía" — usaron un chip comercial ya funcionalizado. ¡No te confundas si te preguntan!</p>
+    </div>
+  </section>
+
+  <!-- 5 · LOS HABITANTES -->
+  <section class="slide">
+    <div class="card">
+      <div class="head"><p class="eyebrow">Paso 5 👨‍👩‍👧‍👦</p><h2>Un equipo de <span class="b">5 vecinos</span></h2></div>
+      <p class="lead">Para parecerse a un humano de verdad usaron <b>células humanas</b> (varias creadas a partir de células madre). ¡Cada una con su oficio! 🏘️</p>
+      <table class="tabla chica">
+        <tr><td>💡 Las luces</td><td>Neuronas que dan la chispa; <b>son las que se apagan en el Parkinson</b> · <span class="sci">neuronas dopaminérgicas (iPSC)</span></td></tr>
+        <tr><td>👩‍🍳 Los cocineros</td><td>Le dan de comer a las neuronas · <span class="sci">astrocitos</span></td></tr>
+        <tr><td>👮 Los policías</td><td>Defienden el lugar · <span class="sci">microglía</span></td></tr>
+        <tr><td>👷 Los albañiles</td><td>Refuerzan los vasos sanguíneos · <span class="sci">pericitos</span></td></tr>
+        <tr><td>🧱 Las baldosas</td><td>Forman la tubería de la sangre · <span class="sci">células endoteliales</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6 · MODELO DE ENFERMEDAD -->
+  <section class="slide">
+    <div class="card">
+      <div class="head"><p class="eyebrow">Paso 6 🧬</p><h2>¿Es un modelo de <span class="r">enfermedad</span>?</h2></div>
+      <p class="lead"><b>¡SÍ, totalmente!</b> Para simular el Parkinson, echaron <b>"basura" en el piso de arriba</b>: cadenas de proteína dañada. <span style="font-family:var(--font-cuerpo); font-size:.85rem; color:var(--azul); font-weight:700">(= fibrillas de α-sinucleína)</span></p>
+      <div class="cols tres">
+        <div class="box rojo">
+          <h3>💡 Las luces fallan</h3>
+          <ul>
+            <li>Las neuronas se <b>debilitan y mueren</b>.</li>
+            <li>Como focos que se van apagando.</li>
+          </ul>
+        </div>
+        <div class="box azul">
+          <h3>😡 Defensas furiosas</h3>
+          <ul>
+            <li>Policías y cocineros se <b>enojan</b>.</li>
+            <li>Causan <b>inflamación</b>.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>🧱 Paredes agrietadas</h3>
+          <ul>
+            <li>El suelo y las paredes se <b>agrietan</b>.</li>
+            <li>La barrera se vuelve un <b>colador</b>.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="lead" style="font-size:1rem">👉 Así vieron, paso a paso, <b>cómo la casita se enfermaba</b> igual que un cerebro con Parkinson.</p>
+    </div>
+  </section>
+
+  <!-- 7 · CÓMO MIRARON -->
+  <section class="slide">
+    <div class="card">
+      <div class="head"><p class="eyebrow">Paso 7 🔍</p><h2>¿Cómo <span class="b">miraron</span> adentro?</h2></div>
+      <p class="lead">La cajita es transparente y diminuta → usaron varios trucos <b>sin romperla</b>:</p>
+      <div class="cols">
+        <div class="box azul">
+          <h3>🔦 Linternas de colores</h3>
+          <ul>
+            <li>Tintes que se pegan a cada célula y <b>brillan</b> de un color.</li>
+            <li>Verde = neuronas, rojo = astrocitos… ¡así sabían quién es quién!</li>
+            <li><span class="sci">= inmunofluorescencia + microscopía confocal</span></li>
+          </ul>
+        </div>
+        <div class="box rojo">
+          <h3>💧 Probar si hay fugas</h3>
+          <ul>
+            <li>Echaron <b>pintura brillante</b> en la tubería de abajo.</li>
+            <li>Si traspasaba al piso de arriba → la barrera estaba rota.</li>
+            <li><span class="sci">= permeabilidad (dextrano, Lucifer Yellow)</span></li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>🩸 Análisis de secreciones</h3>
+          <ul>
+            <li>Recogieron el líquido de los tubitos.</li>
+            <li>Midieron <b>dopamina</b> (buena) e <b>inflamación</b> (mala).</li>
+            <li><span class="sci">= ELISA + Western Blot</span></li>
+          </ul>
+        </div>
+        <div class="box azul">
+          <h3>🔋 Chequeo de baterías</h3>
+          <ul>
+            <li>Vieron si las "baterías" celulares seguían cargadas…</li>
+            <li>…o si echaban <b>"humo tóxico"</b>.</li>
+            <li><span class="sci">= mitocondrias (JC-1) y ROS (CellROX)</span></li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 9 · RESUMEN -->
+  <!-- 8 · RESUMEN -->
   <section class="slide">
     <div class="card">
       <p class="eyebrow">Todo en una 📋</p>
-      <h2>Resumen del <span class="r">Brain-Chip</span></h2>
+      <h2>Resumen de la <span class="r">casita</span></h2>
       <table class="tabla chica">
-        <tr><td>Modelo</td><td>Human Substantia Nigra Brain-Chip</td></tr>
-        <tr><td>Objetivo</td><td>Estudiar Parkinson y alteración de la BBB</td></tr>
-        <tr><td>Diseño</td><td>2 canales microfluídicos + membrana porosa</td></tr>
-        <tr><td>Material</td><td>PDMS · recubierto con colágeno IV + fibronectina + laminina</td></tr>
-        <tr><td>Fabricación</td><td>Microfluídica; chip comercial Chip-S1® funcionalizado</td></tr>
-        <tr><td>Células</td><td>Neuronas DA + astrocitos + microglía + pericitos + endotelio</td></tr>
-        <tr><td>Patología</td><td>Sí → Parkinson mediante α-sinucleína</td></tr>
-        <tr><td>Monitorización</td><td>IF, confocal, permeabilidad BBB, ELISA, WB, JC-1, ROS, viabilidad</td></tr>
+        <tr><td>Modelo</td><td>Human Substantia Nigra Brain-Chip (Nature Comms, 2021)</td></tr>
+        <tr><td>Objetivo</td><td>Estudiar el Parkinson y la rotura de la barrera (BBB)</td></tr>
+        <tr><td>Diseño</td><td>Casita de 2 pisos + suelo con agujeritos (membrana porosa)</td></tr>
+        <tr><td>Material</td><td>Plástico PDMS + "pegamento" de proteínas (colágeno, fibronectina, laminina)</td></tr>
+        <tr><td>Construcción</td><td>Chip comercial Chip-S1® de Emulate + tratamiento UV</td></tr>
+        <tr><td>Vecinos</td><td>Luces, cocineros, policías, albañiles y baldosas (5 células humanas)</td></tr>
+        <tr><td>Enfermedad</td><td>Sí → Parkinson, echando "basura" (α-sinucleína)</td></tr>
+        <tr><td>Herramientas</td><td>Linternas de colores, prueba de fugas, análisis de secreciones y chequeo de baterías</td></tr>
       </table>
     </div>
   </section>
 
-  <!-- 10 · CIERRE -->
+  <!-- 9 · CIERRE -->
   <section class="slide">
     <div class="card cierre">
-      <div class="balloons">🎈🎉🎈</div>
+      <div class="emojibig">🏠🎉🧠</div>
       <p class="eyebrow">¡Y eso es todo! 🙌</p>
       <h1><span class="r">¡Gracias</span> <span class="b">por venir!</span></h1>
-      <p class="lead" style="margin:12px auto 0">¿Preguntas? ¡Charlemos! 🧠✨</p>
+      <p class="lead" style="margin:12px auto 0">¿Preguntas sobre la casita? ¡Charlemos! 🧠✨</p>
       <div><a class="paperlink" href="https://www.nature.com/articles/s41467-021-26066-5" target="_blank" rel="noopener">📄 Leer el paper completo</a></div>
-      <div class="meta">
-        <span class="tag">🧠 Brain-Chip Sustancia Negra</span>
-        <span class="tag">👥 Equipo de 7</span>
-      </div>
     </div>
   </section>
 
@@ -442,10 +364,10 @@
 <div class="pista">Usá  ←  →  o la barra espaciadora  ·  o tocá los botones 👇</div>
 
 <div class="chrome">
-  <div class="marca">🧠 Brain-Chip · Sustancia Negra</div>
+  <div class="marca">🏠 La casita del cerebro</div>
   <div class="nav">
     <button id="prev" aria-label="Anterior">‹</button>
-    <span class="contador" id="contador">1 / 11</span>
+    <span class="contador" id="contador">1 / 10</span>
     <button id="next" aria-label="Siguiente">›</button>
   </div>
 </div>
@@ -455,7 +377,6 @@
   let i = 0;
   const barra = document.getElementById('barra');
   const contador = document.getElementById('contador');
-
   function show(n){
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s,k)=> s.classList.toggle('active', k===i));
@@ -470,7 +391,6 @@
     if(e.key==='Home') show(0);
     if(e.key==='End') show(slides.length-1);
   });
-
   let x0=null;
   addEventListener('touchstart', e=> x0=e.touches[0].clientX, {passive:true});
   addEventListener('touchend', e=>{
@@ -479,7 +399,6 @@
     if(Math.abs(dx)>50) show(i + (dx<0?1:-1));
     x0=null;
   });
-
   const colores = ['#e4342f','#2b7fd4','#ffd23f','#2fae6a','#9b5cff','#e58f2f'];
   document.querySelectorAll('.card').forEach(card=>{
     const layer = document.createElement('div');
@@ -496,7 +415,6 @@
     }
     card.insertBefore(layer, card.firstChild);
   });
-
   show(0);
 </script>
 </body>
