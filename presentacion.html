@@ -105,6 +105,9 @@
   .nav button:active{ transform:translateY(1px); box-shadow:none; }
   .contador{ font-family:var(--font-mano); color:var(--azul-osc); background:rgba(255,255,255,.75); padding:6px 12px; border-radius:999px; min-width:56px; text-align:center; }
   .barra{ position:fixed; top:0; left:0; height:6px; z-index:6; background:var(--rojo); transition:width .4s ease; border-radius:0 6px 6px 0; }
+  #fx{ position:fixed; inset:0; z-index:9; pointer-events:none; }
+  .clap{ position:fixed; z-index:10; pointer-events:none; font-size:2.4rem; animation:clapUp 2.2s ease-out forwards; }
+  @keyframes clapUp { 0%{ transform:translateY(0) scale(.4) rotate(0); opacity:0; } 15%{ opacity:1; } 100%{ transform:translateY(-70vh) scale(1.2) rotate(var(--rot,20deg)); opacity:0; } }
   .pista{ position:fixed; bottom:66px; left:50%; transform:translateX(-50%); z-index:4; font-family:var(--font-mano); color:var(--azul-osc); background:rgba(255,255,255,.7); padding:4px 14px; border-radius:999px; font-size:.9rem; }
 
   @media (max-width:800px){ .cols, .cols.tres, .diagrama{ grid-template-columns:1fr; } .pista{ display:none; } }
@@ -114,6 +117,7 @@
 </head>
 <body>
 <div class="barra" id="barra"></div>
+<canvas id="fx"></canvas>
 <div class="deck" id="deck">
 
   <!-- 0 · INVITACIÓN (referencia) -->
@@ -384,10 +388,13 @@
   const barra = document.getElementById('barra');
   const contador = document.getElementById('contador');
   function show(n){
+    const prev = i;
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s,k)=> s.classList.toggle('active', k===i));
     barra.style.width = (i/(slides.length-1)*100) + '%';
     contador.textContent = (i+1) + ' / ' + slides.length;
+    if(i === 0) burstConfetti(140);
+    if(i === slides.length - 1 && prev !== i) celebrarFinal();
   }
   document.getElementById('next').onclick = ()=> show(i+1);
   document.getElementById('prev').onclick = ()=> show(i-1);
@@ -421,6 +428,104 @@
     }
     card.insertBefore(layer, card.firstChild);
   });
+  /* ---------- CONFETI ANIMADO ---------- */
+  const fx = document.getElementById('fx');
+  const fctx = fx.getContext('2d');
+  let FW, FH, parts = [];
+  function fxResize(){ FW = fx.width = innerWidth; FH = fx.height = innerHeight; }
+  addEventListener('resize', fxResize); fxResize();
+
+  function burstConfetti(n){
+    for(let k=0; k<n; k++){
+      parts.push({
+        x: Math.random()*FW,
+        y: -20 - Math.random()*FH*0.4,
+        vx: (Math.random()-0.5)*3,
+        vy: 2 + Math.random()*4,
+        g: 0.08 + Math.random()*0.06,
+        size: 6 + Math.random()*8,
+        color: colores[(Math.random()*colores.length)|0],
+        rot: Math.random()*Math.PI*2,
+        vrot: (Math.random()-0.5)*0.3,
+        rect: Math.random()<0.55
+      });
+    }
+    if(!rafOn) loopFx();
+  }
+
+  let rafOn = false;
+  function loopFx(){
+    rafOn = true;
+    fctx.clearRect(0,0,FW,FH);
+    for(let k=parts.length-1; k>=0; k--){
+      const p = parts[k];
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vrot;
+      fctx.save();
+      fctx.translate(p.x, p.y); fctx.rotate(p.rot); fctx.fillStyle = p.color;
+      if(p.rect) fctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
+      else { fctx.beginPath(); fctx.arc(0,0,p.size/2,0,Math.PI*2); fctx.fill(); }
+      fctx.restore();
+      if(p.y > FH + 30) parts.splice(k,1);
+    }
+    if(parts.length) requestAnimationFrame(loopFx);
+    else { fctx.clearRect(0,0,FW,FH); rafOn = false; }
+  }
+
+  /* ---------- APLAUSOS (sintetizados) + 👏 ---------- */
+  let finalLock = false;
+  function celebrarFinal(){
+    if(finalLock) return;
+    finalLock = true; setTimeout(()=> finalLock = false, 2500);
+    burstConfetti(220);
+    lluviaDeAplausos();
+    try { playApplause(); } catch(e){ /* audio bloqueado, no pasa nada */ }
+  }
+
+  function lluviaDeAplausos(){
+    const manos = ['👏','🎉','👏','🙌','👏','🎊'];
+    for(let k=0; k<26; k++){
+      setTimeout(()=>{
+        const el = document.createElement('div');
+        el.className = 'clap';
+        el.textContent = manos[(Math.random()*manos.length)|0];
+        el.style.left = (Math.random()*96) + 'vw';
+        el.style.bottom = '-40px';
+        el.style.setProperty('--rot', ((Math.random()*60)-30) + 'deg');
+        el.style.fontSize = (1.8 + Math.random()*1.8) + 'rem';
+        document.body.appendChild(el);
+        setTimeout(()=> el.remove(), 2300);
+      }, Math.random()*1200);
+    }
+  }
+
+  function playApplause(){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    const ac = new AC();
+    const dur = 3.2, now = ac.currentTime;
+    const master = ac.createGain();
+    master.connect(ac.destination);
+    master.gain.setValueAtTime(0.0001, now);
+    master.gain.linearRampToValueAtTime(0.9, now + 0.35);   // el aplauso "crece"
+    master.gain.linearRampToValueAtTime(0.7, now + 2.2);
+    master.gain.linearRampToValueAtTime(0.0001, now + dur); // y se apaga
+    const claps = 260;
+    for(let k=0; k<claps; k++){
+      const t = now + Math.random()*dur;
+      const len = 0.03, sr = ac.sampleRate;
+      const buf = ac.createBuffer(1, Math.ceil(sr*len), sr);
+      const d = buf.getChannelData(0);
+      for(let j=0; j<d.length; j++){ d[j] = (Math.random()*2-1) * Math.pow(1 - j/d.length, 2.2); }
+      const src = ac.createBufferSource(); src.buffer = buf;
+      const bp = ac.createBiquadFilter(); bp.type = 'bandpass';
+      bp.frequency.value = 1100 + Math.random()*2600; bp.Q.value = 0.8;
+      const g = ac.createGain(); g.gain.value = 0.25 + Math.random()*0.5;
+      src.connect(bp); bp.connect(g); g.connect(master);
+      src.start(t);
+    }
+    setTimeout(()=> ac.close(), (dur + 0.6)*1000);
+  }
+
   show(0);
 </script>
 </body>
